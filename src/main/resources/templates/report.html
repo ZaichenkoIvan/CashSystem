@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:fragment="header">
+    <title th:text='#{title}'></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="header"></div>
+<div th:if="${session.xReport != null}">
+    <p class="reptitle">Х-Звіт</p>
+    <div class="center">
+        <p>Дата друку </p>
+        <p th:text="${#dates.format(session.xReport.printtime, 'dd.MM.yyyy HH:mm')}"></p>
+        <table style="width: 100%;">
+            <tr>
+                <td>Чеків:</td>
+                <td class="alignRight" th:text="${session.xReport.countCheck}"></td>
+            </tr>
+            <tr>
+                <td>Анульовано:</td>
+                <td class="alignRight" th:text="${session.xReport.countCancelCheck}"></td>
+            </tr>
+        </table>
+        <table style="margin: auto">
+            <tr>
+                <th>ПДВ</th>
+                <th>Сума ПДВ</th>
+                <th>Сума</th>
+            </tr>
+            <tr th:each="detail, rowStat : ${session.xReport.detail}">
+                <td th:text="${detail.nds}"></td>
+                <td th:text="${detail.ndsTotal}"></td>
+                <td th:text="${detail.total}"></td>
+            </tr>
+            <tr>
+                <td>Разом</td>
+                <td th:text="${session.xReport.sumNdsTotal}"></td>
+                <td th:text="${session.xReport.sumTotal}"></td>
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr>
+                <td>Службове внесення:</td>
+                <td class="alignRight">0</td>
+            </tr>
+            <tr>
+                <td>Службова видача:</td>
+                <td class="alignRight">0</td>
+            </tr>
+        </table>
+        <p class="reptitle">СЛУЖБОВИЙ ЧЕК</p>
+    </div>
+</div>
+<div th:if="${session.zReport != null}">
+    <!--<div th:if="${session.user != null and session.user.userType.type == 'senior_cashier' and session.zReport != null}">-->
+    <p class="reptitle">Z-Звіт</p>
+    <div class="center">
+        <table style="width: 100%;">
+            <tr>
+                <td>ЧЕКІВ</td>
+                <td class="alignRight" th:text="${session.zReport.countCheck}"></td>
+            </tr>
+            <tr>
+                <td>АНУЛЬОВАНО</td>
+                <td class="alignRight" th:text="${session.zReport.countCancelCheck}"></td>
+            </tr>
+            <tr>
+                <td>ОБІГ А</td>
+                <td class="alignRight" th:text="${session.zReport.totalA}"></td>
+            </tr>
+            <tr>
+                <td>ОБІГ Б</td>
+                <td class="alignRight" th:text="${session.zReport.totalB}"></td>
+            </tr>
+            <tr>
+                <td>ОБІГ В</td>
+                <td class="alignRight" th:text="${session.zReport.totalC}"></td>
+            </tr>
+            <tr>
+                <td>ОБІГ</td>
+                <td class="alignRight" th:text="${session.zReport.sumTotal}"></td>
+            </tr>
+            <tr>
+                <td>ПДВ А=20,00%</td>
+                <td class="alignRight" th:text="${session.zReport.ndsTotalA}"></td>
+            </tr>
+            <tr>
+                <td>ПДВ Б=7,00%</td>
+                <td class="alignRight" th:text="${session.zReport.ndsTotalB}"></td>
+            </tr>
+            <tr>
+                <td>ПДВ В=0,00%</td>
+                <td class="alignRight" th:text="${session.zReport.ndsTotalC}"></td>
+            </tr>
+            <tr>
+                <td>ПОДАТОК</td>
+                <td class="alignRight" th:text="${session.zReport.sumNdsTotal}"></td>
+            </tr>
+        </table>
+        <table style="width: 100%;">
+            <tr>
+                <td>Службове внесення:</td>
+                <td class="alignRight">0</td>
+            </tr>
+            <tr>
+                <td>Службова видача:</td>
+                <td class="alignRight">0</td>
+            </tr>
+            <tr>
+                <td>РЕГІСТРИ ДЕННИХ ПІДСУМКІВ ОБНУЛЕНІ</td>
+                <td class="alignRight"></td>
+            </tr>
+            <tr>
+                <td>ГОТІВКА У СЕЙФІ</td>
+                <td class="alignRight">0</td>
+            </tr>
+            <tr>
+                <td>ФІСКАЛЬНИЙ ЗВІТ ДІЙСНИЙ</td>
+                <td class="alignRight" th:text="${session.zReport.number}"></td>
+            </tr>
+        </table>
+        <p th:text="${#dates.format(session.zReport.printtime, 'dd.MM.yyyy HH:mm')}"></p>
+        <p class="reptitle">ФІСКАЛЬНИЙ ЧЕК</p>
+    </div>
+</div>
+</body>
+</html>

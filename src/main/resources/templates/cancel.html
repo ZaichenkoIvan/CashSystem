@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:fragment="header">
+    <title th:text='#{title}'></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="header"></div>
+<div><p th:text="#{title} + '. ' + #{cancel.title}"></p></div>
+<div>
+    <p th:if="${session.check != null and session.check.canceled == 1}" class="h4"
+       th:text="#{check.check} + ' № ' + ${session.check.id} + ' ' + #{cancel.canceled} + '!'">
+    <FORM class="px-4 py-3" method="POST" th:action="@{/cancel}">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" th:text="#{check.number} + ':'"></label>
+            <div class="col-sm-10">
+                <input name="checkid" type="number" min="1" th:placeholder="#{cancel.search}" autofocus required>
+            </div>
+        </div>
+        <button type="submit" name="btnSearchCheck" class="btn btn-primary" th:text="#{cancel.find}"></button>
+    </FORM>
+    <div th:if="${session.check != null and session.check.canceled == 0}">
+        <p class="h4" th:text="#{check.check} + ' № ' + ${session.check.id} + ' на сумму ' + ${session.check.total}">
+        <table class="table table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th th:text="#{check.num}"></th>
+                <th th:text="#{check.goodname}"></th>
+                <th th:text="#{check.code}"></th>
+                <th th:text="#{check.quant}"></th>
+                <th th:text="#{check.price}"></th>
+                <th th:text="#{check.nds}"></th>
+                <th th:text="#{check.ndstotal}"></th>
+                <th th:text="#{check.total}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr th:each="spec, rowStat : ${session.orders}">
+                <td th:text="${rowStat.count}"></td>
+                <td th:text="${spec.goods.name}"></td>
+                <td th:text="${spec.goods.code}"></td>
+                <td th:text="${spec.quant}"></td>
+                <td th:text="${spec.price}"></td>
+                <td th:text="${spec.nds}"></td>
+                <td th:text="${spec.ndstotal}"></td>
+                <td th:text="${spec.total}"></td>
+                <td><a th:if="${spec.canceled == 0}"
+                       th:href="@{'/cancel/edit/{count}'(count=${rowStat.count})}">cancel</a>
+                    <a th:if="${spec.canceled == 1}" th:text="#{cancel.item}"></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <FORM class="px-4 py-3" method="POST" th:action="@{/cancel}">
+        <button type="submit" name="btnCancelCheck" class="btn btn-primary" th:text="#{cancel.check}"></button>
+        <div th:text="#{gen} + ' ' + #{xreport} + ':'"></div>
+        <button type="submit" name="btnXReport" class="btn btn-primary" th:text="#{xreport}"></button>
+        <div th:text="#{gen} + ' ' + #{zreport} + ':'"></div>
+        <button type="submit" name="btnZReport" class="btn btn-primary" th:text="#{zreport}"></button>
+    </FORM>
+</div>
+</body>
+</html>
